@@ -95,12 +95,26 @@
         const urlParams = new URLSearchParams(window.location.search);
         const arquivoDoJogo = urlParams.get('jogo');
 
+        // Configuração global do Ruffle: a mágica acontece aqui
+        window.RufflePlayer = window.RufflePlayer || {};
+        window.RufflePlayer.config = {
+            letterbox: "on",     // Cria bordas pretas se a proporção não bater exato
+            forceScale: true,    // Ignora a trava de tamanho do jogo original
+            forceAlign: true,    // Força o jogo a ficar no centro, não no canto
+            autoplay: "on",      // Tenta iniciar sem precisar daquele botão gigante de "Play"
+            unmuteOverlay: "hidden"
+        };
+
         if (arquivoDoJogo) {
             window.addEventListener("load", () => {
                 const ruffle = window.RufflePlayer.newest();
                 const player = ruffle.createPlayer();
-                const container = document.getElementById("ruffle");
                 
+                // Força o elemento do player a usar 100% do espaço da nossa div #ruffle
+                player.style.width = "100%";
+                player.style.height = "100%";
+                
+                const container = document.getElementById("ruffle");
                 container.appendChild(player);
                 
                 // Constrói o caminho completo até a sua pasta de flashfiles
