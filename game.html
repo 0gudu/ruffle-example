@@ -1,21 +1,116 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="pt-BR">
 <head>
-  <meta charset="UTF-8">
-  <meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="title" content="Ruffle Example">
-  <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-  <meta name="language" content="English">
-  <title>Ruffle Example</title>
-  <script src="main.js"></script>
-  <noscript>Your browser doesn't have JavaScript enabled. Please enable JavaScript or switch to a browser that
-    supports it.</noscript>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Jogando - flash.gustavojp.dev</title>
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body {
+            font-family: 'Verdana', Tahoma, sans-serif;
+            background-color: #0d1117;
+            background-image: radial-gradient(#2a3240 1px, transparent 1px);
+            background-size: 20px 20px;
+            color: #fff;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            min-height: 100vh;
+        }
+
+        /* Barra do topo estilo fliperama */
+        header {
+            width: 100%;
+            background: linear-gradient(to bottom, #ff8a00, #e52e71);
+            border-bottom: 2px solid #fff;
+            padding: 10px 30px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 4px 15px rgba(229, 46, 113, 0.4);
+        }
+
+        header h1 {
+            font-size: 1.5rem;
+            font-weight: 900;
+            font-style: italic;
+            color: #fff;
+            text-shadow: 2px 2px 0 #000;
+            margin: 0;
+        }
+
+        /* Botão de voltar */
+        .voltar-btn {
+            background: #0d1117;
+            color: #ffb800;
+            text-decoration: none;
+            padding: 8px 15px;
+            border: 2px solid #ffb800;
+            border-radius: 5px;
+            font-weight: bold;
+            font-size: 0.9rem;
+            transition: 0.2s;
+            box-shadow: 2px 2px 0 #000;
+        }
+        .voltar-btn:hover {
+            background: #ffb800;
+            color: #0d1117;
+            box-shadow: 2px 2px 0 #ff8a00;
+        }
+
+        /* Container que abraça o Ruffle */
+        .game-container {
+            margin-top: 30px;
+            padding: 15px;
+            background: rgba(20, 25, 35, 0.95);
+            border: 2px solid #444;
+            border-radius: 10px;
+            box-shadow: 0 0 25px rgba(0,0,0,0.8);
+        }
+
+        #ruffle {
+            width: 800px;
+            height: 600px;
+            background-color: #000;
+        }
+    </style>
 </head>
 <body>
-<div id='ruffle' class="gameloc"></div>
-<script src="https://unpkg.com/@ruffle-rs/ruffle"></script>
-<script id = "gabe">swfobject.embedSWF("../ruffle-example/flashfiles/Transformice.swf", 'ruffle', 800, 600);</script>
+    
+    <header>
+        <h1>flash.gustavojp.dev</h1>
+        <a href="index.html" class="voltar-btn">⬅ Escolher outro jogo</a>
+    </header>
+
+    <div class="game-container">
+        <!-- Ruffle injeta o canvas aqui dentro -->
+        <div id="ruffle" class="gameloc"></div>
+    </div>
+
+    <!-- Importa o script do Ruffle -->
+    <script src="https://unpkg.com/@ruffle-rs/ruffle"></script>
+    
+    <script>
+        const urlParams = new URLSearchParams(window.location.search);
+        const arquivoDoJogo = urlParams.get('jogo');
+
+        if (arquivoDoJogo) {
+            window.addEventListener("load", () => {
+                const ruffle = window.RufflePlayer.newest();
+                const player = ruffle.createPlayer();
+                const container = document.getElementById("ruffle");
+                
+                container.appendChild(player);
+                
+                // Constrói o caminho completo até a sua pasta de flashfiles
+                const caminhoCompleto = `../ruffle-example/flashfiles/${arquivoDoJogo}`;
+                player.load(caminhoCompleto);
+            });
+        } else {
+            // Mensagem de erro caso alguém abra a tela sem escolher um jogo
+            document.getElementById("ruffle").innerHTML = "<h2 style='text-align:center; padding-top: 250px; color:#ff8a00; font-family: sans-serif;'>Nenhum jogo selecionado.</h2>";
+        }
+    </script>
 </body>
 </html>
-
